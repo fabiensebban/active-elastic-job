@@ -19,7 +19,6 @@ module ActiveElasticJob
     # environment, which verifies the digest, have to use the *same*
     # +secrets.secret_key_base+ setting.
     class SqsMessageConsumer
-      LOGGER = Logger.new("#{Rails.root}/log/active_elastic_job.log")
       OK_RESPONSE = [ '200'.freeze, { 'Content-Type'.freeze => 'text/plain'.freeze }, [ 'OK'.freeze ] ]
       FORBIDDEN_RESPONSE = [
         '403'.freeze,
@@ -34,10 +33,10 @@ module ActiveElasticJob
 
       def call(env) #:nodoc:
         request = ActionDispatch::Request.new env
-        LOGGER.info('in the call function')
+        logger.info('in the call function')
         if enabled? && aws_sqsd?(request)
-          LOGGER.info('is request local ? ' + request.local?.to_s)
-          LOGGER.info('is sent from docker host ? ' + sent_from_docker_host?(request).to_s)
+          logger.info('is request local ? ' + request.local?.to_s)
+          logger.info('is sent from docker host ? ' + sent_from_docker_host?(request).to_s)
           unless request.local? || sent_from_docker_host?(request)
             return FORBIDDEN_RESPONSE
           end
@@ -49,7 +48,7 @@ module ActiveElasticJob
             begin
               execute_job(request)
             rescue ActiveElasticJob::MessageVerifier::InvalidDigest => e
-              LOGGER.info('error in message verification')
+              logger.info('error in message verification')
               return FORBIDDEN_RESPONSE
             end
             return OK_RESPONSE
