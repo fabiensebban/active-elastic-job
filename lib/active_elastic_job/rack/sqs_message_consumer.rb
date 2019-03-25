@@ -35,9 +35,10 @@ module ActiveElasticJob
         request = ActionDispatch::Request.new env
         puts 'in the call function'
         if enabled? && aws_sqsd?(request)
-          puts 'is request local ? ' + request.local?.to_s
-          puts 'is sent from docker host ? ' + sent_from_docker_host?(request).to_s
+          puts ('is request local ? ' + request.local?.to_s)
+          puts ('is sent from docker host ? ' + sent_from_docker_host?(request).to_s)
           unless request.local? || sent_from_docker_host?(request)
+            puts 'forbiden :( '
             return FORBIDDEN_RESPONSE
           end
 
