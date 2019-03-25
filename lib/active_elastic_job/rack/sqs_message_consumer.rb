@@ -33,10 +33,10 @@ module ActiveElasticJob
 
       def call(env) #:nodoc:
         request = ActionDispatch::Request.new env
-        logger.info('in the call function')
+        puts 'in the call function'
         if enabled? && aws_sqsd?(request)
-          logger.info('is request local ? ' + request.local?.to_s)
-          logger.info('is sent from docker host ? ' + sent_from_docker_host?(request).to_s)
+          puts 'is request local ? ' + request.local?.to_s
+          puts 'is sent from docker host ? ' + sent_from_docker_host?(request).to_s
           unless request.local? || sent_from_docker_host?(request)
             return FORBIDDEN_RESPONSE
           end
@@ -48,7 +48,7 @@ module ActiveElasticJob
             begin
               execute_job(request)
             rescue ActiveElasticJob::MessageVerifier::InvalidDigest => e
-              logger.info('error in message verification')
+              puts 'error in message verification'
               return FORBIDDEN_RESPONSE
             end
             return OK_RESPONSE
