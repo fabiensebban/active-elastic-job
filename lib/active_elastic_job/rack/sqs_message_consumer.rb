@@ -25,7 +25,7 @@ module ActiveElasticJob
         { 'Content-Type'.freeze => 'text/plain'.freeze },
         [ 'Request forbidden!'.freeze ]
       ]
-      DOCKER_HOST_IP = '172.17.0.1'.freeze
+      DOCKER_HOST_IP = '172.17.0.3'.freeze
 
       def initialize(app) #:nodoc:
         @app = app
