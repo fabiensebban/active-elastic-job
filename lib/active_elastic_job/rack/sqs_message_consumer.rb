@@ -37,10 +37,10 @@ module ActiveElasticJob
         if enabled? && aws_sqsd?(request)
           puts ('is request local ? ' + request.local?.to_s)
           puts ('is sent from docker host ? ' + sent_from_docker_host?(request).to_s)
-          unless request.local? || sent_from_docker_host?(request)
-            puts 'forbiden :( '
-            return FORBIDDEN_RESPONSE
-          end
+          # unless request.local? || sent_from_docker_host?(request)
+          #   puts 'forbiden :( '
+          #   return FORBIDDEN_RESPONSE
+          # end
 
           if periodic_task?(request)
             execute_periodic_task(request)
